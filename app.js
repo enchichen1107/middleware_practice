@@ -12,7 +12,8 @@ app.set('view engine', 'hbs')
 // testing routers
 // middleware
 app.use(function (req, res, next) {
-  middleware = `${Date.now()} | ${req.method} from ${req.originalUrl}`
+  const time = new Date().toLocaleString('zh', { timeZone: 'Asia/Taipei', hour12: false })
+  middleware = `${time} | ${req.method} from ${req.originalUrl}`
   console.log(middleware)
   next()
 })
