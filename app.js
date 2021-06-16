@@ -3,35 +3,46 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const app = express()
 const port = 3000
-let middleware = ''
 
 // set view engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
-// testing routers
-// middleware
-app.use(function (req, res, next) {
-  const time = new Date().toLocaleString('zh', { timeZone: 'Asia/Taipei', hour12: false })
-  middleware = `${time} | ${req.method} from ${req.originalUrl}`
-  console.log(middleware)
+// handle middleware
+app.use(function showTime (req, res, next) {
+  const requestTime = Date.now()
+  res.on('finish', () => {
+    const respondTime = Date.now()
+    const duration = respondTime - requestTime
+    const formatRequestTime = new Date(requestTime).toLocaleString('zh', { timeZone: 'Asia/Taipei', hour12: false })
+    const middleware = `${formatRequestTime} | ${req.method} from ${req.originalUrl} | total time: ${duration}ms`
+    console.log(middleware)
+  })
   next()
 })
 
+// get from /
 app.get('/', (req, res) => {
-  res.render('index', { middleware })
+  const message = '列出全部 Todo'
+  res.render('index', { message })
 })
 
+// get from /new
 app.get('/new', (req, res) => {
-  res.render('index', { middleware })
+  const message = '新增 Todo 頁面'
+  res.render('index', { message })
 })
 
+// get from /:id
 app.get('/:id', (req, res) => {
-  res.render('index', { middleware })
+  const message = '顯示一筆 Todo'
+  res.render('index', { message })
 })
 
+// post to /
 app.post('/', (req, res) => {
-  res.render('index', { middleware })
+  const message = '新增一筆  Todo'
+  res.render('index', { message })
 })
 
 // listen on port
