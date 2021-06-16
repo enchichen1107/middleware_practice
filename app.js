@@ -10,14 +10,28 @@ app.set('view engine', 'hbs')
 
 // handle middleware
 app.use(function showTime (req, res, next) {
+  // set request time
   const requestTime = Date.now()
+
+  // fired when entering finish state
   res.on('finish', () => {
+    // set respond time
     const respondTime = Date.now()
+
+    // calculate elapse duration
     const duration = respondTime - requestTime
+
+    // transfer request time to required format
     const formatRequestTime = new Date(requestTime).toLocaleString('zh', { timeZone: 'Asia/Taipei', hour12: false })
+
+    // build server log
     const middleware = `${formatRequestTime} | ${req.method} from ${req.originalUrl} | total time: ${duration}ms`
+
+    // send server log
     console.log(middleware)
   })
+
+  // continue to enter one of the below routes
   next()
 })
 
