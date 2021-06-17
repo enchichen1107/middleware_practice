@@ -25,10 +25,10 @@ app.use(function showTime (req, res, next) {
     const formatRequestTime = new Date(requestTime).toLocaleString('zh', { timeZone: 'Asia/Taipei', hour12: false })
 
     // build server log
-    const middleware = `${formatRequestTime} | ${req.method} from ${req.originalUrl} | total time: ${duration}ms`
+    const middlewareLog = `${formatRequestTime} | ${req.method} from ${req.originalUrl} | total time: ${duration}ms`
 
     // send server log
-    console.log(middleware)
+    console.log(middlewareLog)
   })
 
   // continue to enter one of the below routes
